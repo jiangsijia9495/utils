@@ -1,6 +1,33 @@
 import numpy as np
 from typing import Union
 
+def get_center(points):
+    "get vertex range(MIN,MAX) in X,Y,Z"
+    "return type np.array()"
+    center = []
+    points_range = get_range(points)
+    center.append(np.average(points_range[0:2]))
+    center.append(np.average(points_range[2:4]))
+    center.append(np.average(points_range[4:6]))
+    return np.array(center)
+
+
+
+def get_range(points):
+    "get vertex range(MIN,MAX) in X,Y,Z"
+    "return type np.array()"
+    res=[]
+    res.append(np.min(points[:, 0]))
+    res.append(np.max(points[:, 0]))
+
+    res.append(np.min(points[:, 1]))
+    res.append(np.max(points[:, 1]))
+
+    res.append(np.min(points[:, 2]))
+    res.append(np.max(points[:, 2]))
+
+    return np.array(res)
+
 def translate(points, xyz: Union[list, tuple, np.ndarray]):
     """Translate the mesh.
     Parameters
@@ -8,7 +35,7 @@ def translate(points, xyz: Union[list, tuple, np.ndarray]):
     xyz : list or tuple or np.ndarray
         Length 3 list, tuple or array.
     """
-    points += np.asarray(xyz)
+    points -= np.asarray(xyz)
 
 # def rotate_z(self, angle):
 #     """Rotate mesh about the z-axis.
@@ -75,8 +102,9 @@ faces = faces[1:]
 #     for f in faces + 1:
 #         fp.write('f %d %d %d\n' % (f[0], f[1], f[2]))
 
-axis_rotation(verts,358, inplace=True, deg=True, axis='z')
-# translate(verts,(0.5,0.5,0.5))
+print(get_center(verts))
+translate(verts,get_center(verts))
+axis_rotation(verts,180, inplace=True, deg=True, axis='z')
 with open("smpl_re.obj", 'w') as fp:
     for v in verts:
         fp.write('v %f %f %f\n' % (v[0], v[1], v[2]))
