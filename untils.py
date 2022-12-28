@@ -7,6 +7,7 @@ pointclouds = Pointclouds(points=[torch.cat([render_out_fix['pts'].view(-1,3),re
 from pytorch3d.io import IO
 IO().save_pointcloud(pointclouds, "output_pointcloud.ply")
 
+from matplotlib import pyplot as plt
 f = plt.figure()
 f.add_subplot(1,2, 1)
 plt.imshow(img1)
