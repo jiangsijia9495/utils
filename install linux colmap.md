@@ -15,18 +15,20 @@ Open ~/.bashrc in a text editor, and add a new line export CUDA_PATH=/usr at the
 Run source ~/.bashrc to make the change take effect.
 Build CUDA samples (optional)
 Build the official CUDA samples to test if CUDA has been successfully installed.
-
+```bash
 sudo apt install git build-essential
 git clone https://github.com/NVIDIA/cuda-samples.git
 cd cuda-samples
 make -j3 SMS="75"
-Use the number “75” because it represents the Turing architecture. Use the number that matches your GPU (find out here).
+```
 
+Use the number “75” because it represents the Turing architecture. Use the number that matches your GPU (find out here).
 The samples are output to ./bin/x86_64/linux/release directory. Pick up some and run them to check if CUDA is successfully installed.
 
 Install dependencies
 Install other dependencies that COLMAP requires. These are the same as what is described in the official document.
 
+```bash
 sudo apt install \
     cmake \
     libboost-program-options-dev \
@@ -44,9 +46,12 @@ sudo apt install \
     qtbase5-dev \
     libqt5opengl5-dev \
     libcgal-dev
+```
+
 Build Ceres Solver
 Now build the last dependency, the Ceres Solver, which needs to be built from source.
 
+```bash
 # Install dependencies of the Ceres Solver
 # that are not installed yet.
 sudo apt install libatlas-base-dev libsuitesparse-dev
@@ -61,11 +66,14 @@ cd build-2.0.0
 cmake .. -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
 make -j3
 sudo make install
+```
+
 The COLMAP document uses make -j to build Ceres, which could use up all available CPU threads and consume over 20 GB of memory, which is undesired in an ordinary PC. Use make -j3 instead to reduce resource usage, though it takes longer to build.
 
 Build COLMAP
 Finally, build COLMAP.
 
+```bash
 cd ..
 git clone https://github.com/colmap/colmap.git
 cd colmap
@@ -76,6 +84,8 @@ cd build
 CC=/usr/bin/gcc-9 CXX=/usr/bin/g++-9 cmake ..
 make -j3
 sudo make install
+```
+
 If not specified, CMake uses gcc-10 and g++-10 to compile (on Ubuntu 20.10), which makes a COLMAP source file PoissonRecon.cpp throws a compiler error, stating that gcc/g++ version later than 9 is not supported. As a result, manually specify version 9 here when configuring the CMake project.
 
 If you are not sure what compilers are installed on your platform, use the command (source): dpkg --list | grep compiler , which prints all installed packages with the word “compiler” contained.
